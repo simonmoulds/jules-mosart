@@ -2,3 +2,51 @@
 # Please follow the best practices: 
 # https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
 # in particular regarding the standardized folder structure mentioned there. 
+
+import os
+
+CONFIG = 'config/gwm-config.yml'
+configfile: CONFIG
+
+# include: 'Snakefile_0'
+
+rule all:
+    input:
+        'results/regrid_filenames.txt'
+
+rule regrid_jules_output:
+    input:
+        script='workflow/scripts/regrid-jules-output.py',
+        config=CONFIG
+    output:
+        'results/regrid_filenames.txt'
+    params:
+        None
+    resources:
+        time = "00:30:00",
+        mem_mb = 4000,
+        partition = "short"
+    shell:
+        """
+        python {input.script} {output} {input.config}
+        """
+# rule all:
+#     input:
+#         expand('results/exp1/fig/{aggr_plot}', aggr_plot = AGGR_PLOT)
+
+# rule select_stations:
+#     input:
+#         script='workflow/scripts/select-stations-exp1.R',
+#         config=CONFIG
+#     output:
+#         STATIONS_FILE
+#     params:
+#         outfile=STATIONS_FILE
+#     resources:
+#         time = "00:30:00",
+#         mem_mb = 4000,
+#         partition = "short"
+#     shell:
+#         """
+#         Rscript {input.script} {config[input_data_root]} {params.outfile} {input.config}
+#         """
