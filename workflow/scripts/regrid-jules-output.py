@@ -7,6 +7,7 @@ import pandas as pd
 import xarray
 import click
 import yaml
+from tqdm import tqdm
 from constants import OUTPUT_VARS
 from utils import convert_to_2d
 
