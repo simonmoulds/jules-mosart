@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+import os
+import numpy as np
+import xarray
+
+
 def aggregate_to_month(x):
     # Get the number of days in each month for the current dataset
     days_in_month = xarray.DataArray(
