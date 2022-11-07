@@ -15,37 +15,55 @@ from utils import convert_to_2d
 @click.option('-o', '--outputfile', default='.', help='Name of output file')
 @click.option('--config', default='config.yml', help='YAML configuration file')
 def main(outputfile, config):
-    # Open configuration file
     with open(config, 'r') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
 
+    start_year = int(config['jules']['start_year'])
+    end_year = int(config['jules']['end_year'])
+    years = np.arange(start_year, end_year+1)
+    id_stem = config['jules']['id_stem']
+    job_name = config['jules']['job_name']
+    profile_name = config['jules']['profile_name']
+    jules_output_directory = config['jules']['jules_output_directory']
+    gridfile = config['jules']['gridfile']
+    y_dim_name = config['jules']['y_dim_name']
+    x_dim_name = config['jules']['x_dim_name']
+    mask_var_name = config['jules']['mask_var_name']
+    soil_dim_name = config['jules']['soil_dim_name']
+    tile_dim_name = config['jules']['tile_dim_name']
+    pft_dim_name = config['jules']['pft_dim_name']
+
     # Open 2D land fraction file to obtain land mask
-    y = xarray.open_dataset(GRIDFILE)
-    MASK = y[MASK_VAR_NAME].values
-    LAT = y[Y_DIM_NAME].values[:]
-    LON = y[X_DIM_NAME].values[:]
+    y = xarray.open_dataset(gridfile)
+    mask = y[mask_var_name].values
+    lat = y[y_dim_name].values[:]
+    lon = y[x_dim_name].values[:]
     y.close()
+
+    outputdir = config['regrid_jules_output']['output_directory']
+    file_suffix = config['regrid_jules_output']['file_suffix']
+    os.makedirs(outputdir, exist_ok=True)
 
     # Loop through years
     # TODO - is it a requirement that JULES output is written annually? If so then we ought to also include option for monthly
     filelist = open(outputfile, 'w')
-    for i in tqdm(range(len(YEARS))):
-        yr = YEARS[i]
-        job_name = JOB_NAME.format(year=yr)
-        FN = ID_STEM + '.' + job_name + '.' + PROFILE_NAME + '.' + str(yr) + '.nc'
-        x = xarray.open_dataset(os.path.join(DATADIR, FN))
+    for i in tqdm(range(len(years))):
+        yr = years[i]
+        job_name = job_name.format(year=yr)
+        filename = (
+            id_stem + '.' + job_name + '.' + profile_name + '.' + str(yr) + '.nc'
+        )
+        x = xarray.open_dataset(os.path.join(jules_output_directory, filename))
         ds = convert_to_2d(
-            x, OUTPUT_VARS[PROFILE_NAME], LAT, LON, MASK,
-            config['jules']['soil_dim_name'],
-            config['jules']['tile_dim_name'],
-            config['jules']['pft_dim_name']
+            x, OUTPUT_VARS[profile_name], lat, lon, mask,
+            soil_dim_name, tile_dim_name, pft_dim_name
         )
         ds['lat'].attrs['standard_name'] = 'latitude'
         ds['lat'].attrs['units'] = 'degrees_north'
         ds['lon'].attrs['standard_name'] = 'longitude'
         ds['lon'].attrs['units'] = 'degrees_east'
         nc_outputfile = os.path.join(
-            OUTDIR, os.path.splitext(FN)[0] + '.' + FILE_SUFFIX + '.nc'
+            outputdir, os.path.splitext(filename)[0] + '.' + file_suffix + '.nc'
         ),
         ds.to_netcdf(nc_outputfile, format="NETCDF4")
         x.close()

@@ -5,7 +5,7 @@
 
 import os
 
-CONFIG = 'config/gwm-config.yml'
+CONFIG = 'config/gwm-arc-config.yml'
 configfile: CONFIG
 
 # include: 'Snakefile_0'
@@ -28,7 +28,7 @@ rule regrid_jules_output:
         partition = "short"
     shell:
         """
-        python {input.script} {output} {input.config}
+        python {input.script} -o {output} --config {input.config}
         """
 # rule all:
 #     input:
