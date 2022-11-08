@@ -26,6 +26,8 @@ rule regrid_jules_output:
         time = "00:30:00",
         mem_mb = 4000,
         partition = "short"
+    conda:
+        'jules_mosart'
     shell:
         """
         python {input.script} -o {output} --config {input.config}
