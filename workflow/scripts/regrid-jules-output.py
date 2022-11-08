@@ -44,15 +44,16 @@ def main(outputfile, config):
 
     # Loop through years
     # TODO - is it a requirement that JULES output is written annually? If so then we ought to also include option for monthly
-    filelist = open(outputfile, 'w')
+    # filelist = open(outputfile, 'w')
     for i in tqdm(range(len(years))):
         yr = years[i]
         job_name = job_name.format(year=yr)
         filename = (
             id_stem + '.' + job_name + '.' + profile_name + '.' + str(yr) + '.nc'
         )
+        print(os.path.join(jules_output_directory, filename))
         x = xarray.open_dataset(os.path.join(jules_output_directory, filename))
-        print(x)
+        # print(x)
         # ds = convert_to_2d(
         #     x, OUTPUT_VARS[profile_name], lat, lon, mask,
         #     soil_dim_name, tile_dim_name, pft_dim_name
@@ -61,14 +62,14 @@ def main(outputfile, config):
         # ds['lat'].attrs['units'] = 'degrees_north'
         # ds['lon'].attrs['standard_name'] = 'longitude'
         # ds['lon'].attrs['units'] = 'degrees_east'
-        nc_outputfile = os.path.join(
-            outputdir, os.path.splitext(filename)[0] + '.' + file_suffix + '.nc'
-        )
+        # nc_outputfile = os.path.join(
+        #     outputdir, os.path.splitext(filename)[0] + '.' + file_suffix + '.nc'
+        # )
         # print(ds)
         # ds.to_netcdf(nc_outputfile) #, format="NETCDF4", engine="netcdf4")
-        x.close()
-        filelist.write(("%s" + os.linesep) % nc_outputfile)
-    filelist.close()
+        # x.close()
+        # filelist.write(("%s" + os.linesep) % nc_outputfile)
+    # filelist.close()
 
 if __name__ == '__main__':
     main()
