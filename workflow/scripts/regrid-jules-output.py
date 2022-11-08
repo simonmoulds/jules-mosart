@@ -65,7 +65,7 @@ def main(outputfile, config):
         nc_outputfile = os.path.join(
             outputdir, os.path.splitext(filename)[0] + '.' + file_suffix + '.nc'
         )
-        ds.to_netcdf(nc_outputfile) #, format="NETCDF4", engine="netcdf4")
+        ds.to_netcdf(nc_outputfile, format="NETCDF4")
         x.close()
         filelist.write(("%s" + os.linesep) % nc_outputfile)
     filelist.close()
