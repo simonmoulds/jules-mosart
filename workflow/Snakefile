@@ -30,6 +30,7 @@ rule regrid_jules_output:
         'jules_mosart'
     shell:
         """
+        export PYTHONPATH=
         python {input.script} -o {output} --config {input.config}
         """
 # rule all:
