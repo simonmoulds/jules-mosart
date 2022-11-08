@@ -27,7 +27,7 @@ rule regrid_jules_output:
         mem_mb = 4000,
         partition = "short"
     conda:
-        'jules_mosart'
+        'esmvaltool'
     shell:
         """
         export PYTHONPATH=
