@@ -52,18 +52,19 @@ def main(outputfile, config):
             id_stem + '.' + job_name + '.' + profile_name + '.' + str(yr) + '.nc'
         )
         x = xarray.open_dataset(os.path.join(jules_output_directory, filename))
-        ds = convert_to_2d(
-            x, OUTPUT_VARS[profile_name], lat, lon, mask,
-            soil_dim_name, tile_dim_name, pft_dim_name
-        )
-        ds['lat'].attrs['standard_name'] = 'latitude'
-        ds['lat'].attrs['units'] = 'degrees_north'
-        ds['lon'].attrs['standard_name'] = 'longitude'
-        ds['lon'].attrs['units'] = 'degrees_east'
+        print(x)
+        # ds = convert_to_2d(
+        #     x, OUTPUT_VARS[profile_name], lat, lon, mask,
+        #     soil_dim_name, tile_dim_name, pft_dim_name
+        # )
+        # ds['lat'].attrs['standard_name'] = 'latitude'
+        # ds['lat'].attrs['units'] = 'degrees_north'
+        # ds['lon'].attrs['standard_name'] = 'longitude'
+        # ds['lon'].attrs['units'] = 'degrees_east'
         nc_outputfile = os.path.join(
             outputdir, os.path.splitext(filename)[0] + '.' + file_suffix + '.nc'
         )
-        print(ds)
+        # print(ds)
         # ds.to_netcdf(nc_outputfile) #, format="NETCDF4", engine="netcdf4")
         x.close()
         filelist.write(("%s" + os.linesep) % nc_outputfile)
