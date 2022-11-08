@@ -47,12 +47,12 @@ def main(outputfile, config):
     # filelist = open(outputfile, 'w')
     for i in tqdm(range(len(years))):
         yr = years[i]
-        job_name = job_name.format(year=yr)
+        job_name_fmt = job_name.format(year=yr)
         filename = (
-            id_stem + '.' + job_name + '.' + profile_name + '.' + str(yr) + '.nc'
+            id_stem + '.' + job_name_fmt + '.' + profile_name + '.' + str(yr) + '.nc'
         )
-        print(os.path.join(jules_output_directory, filename))
-        # x = xarray.open_dataset(os.path.join(jules_output_directory, filename))
+        # print(os.path.join(jules_output_directory, filename))
+        x = xarray.open_dataset(os.path.join(jules_output_directory, filename))
         # print(x)
         # ds = convert_to_2d(
         #     x, OUTPUT_VARS[profile_name], lat, lon, mask,
