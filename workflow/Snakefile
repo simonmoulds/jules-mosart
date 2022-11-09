@@ -33,6 +33,49 @@ rule regrid_jules_output:
         export PYTHONPATH=
         python {input.script} -o {output} --config {input.config}
         """
+
+rule aggregate_jules_output_month:
+    input:
+        regrid_filenames='results/regrid_filenames.txt',
+        script='workflow/scripts/aggregate-jules-output.py',
+        config=CONFIG
+    output:
+        'results/aggregate_filenames.txt'
+    params:
+        period='month'
+    resources:
+        time = "00:30:00",
+        mem_mb = 4000,
+        partition = "short"
+    conda:
+        'esmvaltool'
+    shell:
+        """
+        export PYTHONPATH=
+        python {input.script} -i {input.regrid_filenames} -o {output} --period {params.period} --config {input.config}
+        """
+
+rule aggregate_jules_output_year:
+    input:
+        regrid_filenames='results/regrid_filenames.txt',
+        script='workflow/scripts/aggregate-jules-output.py',
+        config=CONFIG
+    output:
+        'results/aggregate_filenames.txt'
+    params:
+        period='year'
+    resources:
+        time = "00:30:00",
+        mem_mb = 4000,
+        partition = "short"
+    conda:
+        'esmvaltool'
+    shell:
+        """
+        export PYTHONPATH=
+        python {input.script} -i {input.regrid_filenames} -o {output} --period {params.period} --config {input.config}
+        """
+
 # rule all:
 #     input:
 #         expand('results/exp1/fig/{aggr_plot}', aggr_plot = AGGR_PLOT)

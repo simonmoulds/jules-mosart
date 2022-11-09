@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 import numpy as np
 import pandas as pd
@@ -43,17 +46,16 @@ def main(outputfile, config):
     os.makedirs(outputdir, exist_ok=True)
 
     # Loop through years
-    # TODO - is it a requirement that JULES output is written annually? If so then we ought to also include option for monthly
-    filelist = open(outputfile, 'w')
+    # TODO - is it a requirement that JULES output is written annually?
+    # If not then we ought to also include option for monthly
+    output_filelist = open(outputfile, 'w')
     for i in tqdm(range(len(years))):
         yr = years[i]
         job_name_fmt = job_name.format(year=yr)
         filename = (
             id_stem + '.' + job_name_fmt + '.' + profile_name + '.' + str(yr) + '.nc'
         )
-        # print(os.path.join(jules_output_directory, filename))
         x = xarray.open_dataset(os.path.join(jules_output_directory, filename))
-        # print(x)
         ds = convert_to_2d(
             x, OUTPUT_VARS[profile_name], lat, lon, mask,
             soil_dim_name, tile_dim_name, pft_dim_name
@@ -67,8 +69,8 @@ def main(outputfile, config):
         )
         ds.to_netcdf(nc_outputfile, format="NETCDF4")
         x.close()
-        filelist.write(("%s" + os.linesep) % nc_outputfile)
-    filelist.close()
+        output_filelist.write(("%s" + os.linesep) % nc_outputfile)
+    output_filelist.close()
 
 if __name__ == '__main__':
     main()
