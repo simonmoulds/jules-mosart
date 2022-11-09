@@ -12,7 +12,9 @@ configfile: CONFIG
 
 rule all:
     input:
-        'results/regrid_filenames.txt'
+        'results/regrid_filenames.txt',
+        'results/aggregate_month_filenames.txt',
+        'results/aggregate_year_filenames.txt'
 
 rule regrid_jules_output:
     input:
@@ -40,7 +42,7 @@ rule aggregate_jules_output_month:
         script='workflow/scripts/aggregate-jules-output.py',
         config=CONFIG
     output:
-        'results/aggregate_filenames.txt'
+        'results/aggregate_year_filenames.txt'
     params:
         period='month'
     resources:
@@ -61,7 +63,7 @@ rule aggregate_jules_output_year:
         script='workflow/scripts/aggregate-jules-output.py',
         config=CONFIG
     output:
-        'results/aggregate_filenames.txt'
+        'results/aggregate_month_filenames.txt'
     params:
         period='year'
     resources:
