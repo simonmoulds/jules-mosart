@@ -41,13 +41,13 @@ def main(inputfile, outputfile, period, config):
         x = x[rate_vars]
         # Now aggregate in time
         if period == 'MONTH':
-            nc_outputfile = basename + '.month.nc'
+            nc_outputfile = os.path.join(path, basename + '.month.nc')
             x_aggr = x.groupby("time.month").sum(dim="time") # m d-1 -> m month-1
         elif period == 'YEAR':
-            nc_outputfile = basename + '.year.nc'
+            nc_outputfile = os.path.join(path, basename + '.year.nc')
             x_aggr = x.groupby("time.year").sum(dim="time") # m d-1 -> m year-1
 
-        x_aggr.to_netcdf(os.path.join(path, nc_outputfile))
+        x_aggr.to_netcdf(nc_outputfile)
         x.close()
         output_filelist.write(("%s" + os.linesep) % nc_outputfile)
     output_filelist.close()
