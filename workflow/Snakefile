@@ -29,7 +29,7 @@ rule regrid_jules_output:
         mem_mb = 4000,
         partition = "short"
     conda:
-        'esmvaltool'
+        'jules_mosart'
     shell:
         """
         export PYTHONPATH=
@@ -50,7 +50,7 @@ rule aggregate_jules_output_month:
         mem_mb = 4000,
         partition = "short"
     conda:
-        'esmvaltool'
+        'jules_mosart'
     shell:
         """
         export PYTHONPATH=
@@ -71,7 +71,7 @@ rule aggregate_jules_output_year:
         mem_mb = 4000,
         partition = "short"
     conda:
-        'esmvaltool'
+        'jules_mosart'
     shell:
         """
         export PYTHONPATH=
