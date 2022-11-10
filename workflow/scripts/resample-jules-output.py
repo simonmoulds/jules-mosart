@@ -6,6 +6,7 @@ import tempfile
 import subprocess
 import numpy as np
 import xarray
+import click
 
 
 @click.command()
