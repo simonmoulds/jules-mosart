@@ -14,6 +14,8 @@ import click
 @click.option('-o', '--outputfile', default='.', help='Name of output file')
 @click.option('--config', default='config.yml', help='YAML configuration file')
 def main(inputfile, outputfile, config):
+    with open(config, 'r') as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
 
     res = config['resample_jules_output']['resolution']
     if res not in ['30sec', '5min', '15min']:
