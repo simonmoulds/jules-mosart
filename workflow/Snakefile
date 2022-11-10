@@ -14,7 +14,8 @@ rule all:
     input:
         'results/regrid_filenames.txt',
         'results/aggregate_month_filenames.txt',
-        'results/aggregate_year_filenames.txt'
+        'results/aggregate_year_filenames.txt',
+        'results/resample_filenames.txt'
 
 rule regrid_jules_output:
     input:
@@ -77,6 +78,26 @@ rule aggregate_jules_output_year:
         export PYTHONPATH=
         python {input.script} -i {input.regrid_filenames} -o {output} --period {params.period} --config {input.config}
         """
+
+rule resample_jules_output:
+    input:
+        regrid_filenames='results/regrid_filenames.txt',
+        script='workflow/scripts/resample-jules-output.py',
+        config=CONFIG
+    output:
+        'results/resample_filenames.txt'
+    resources:
+        time = "00:30:00",
+        mem_mb = 4000,
+        partition = "short"
+    conda:
+        'jules_mosart'
+    shell:
+        """
+        export PYTHONPATH=
+        python {input.script} -i {input.regrid_filenames} -o {output} --config {input.config}
+        """
+
 
 # rule all:
 #     input:
