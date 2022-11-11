@@ -10,7 +10,7 @@ import click
 import yaml
 from tqdm import tqdm
 
-TMPDIR = int(os.environ['TMPDIR'])
+TMPDIR = os.environ['TMPDIR']
 if TMPDIR == '':
     TMPDIR = '/tmp'
 
