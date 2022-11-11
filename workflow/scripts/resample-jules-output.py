@@ -10,6 +10,9 @@ import click
 import yaml
 from tqdm import tqdm
 
+TMPDIR = int(os.environ['TMPDIR'])
+if TMPDIR == '':
+    TMPDIR = '/tmp'
 
 @click.command()
 @click.option('-i', '--inputfile', default='.', help='Name of input file')
@@ -53,7 +56,8 @@ def main(inputfile, outputfile, config):
     else:
         yfirst = ymin + dres / 2.
         yinc = abs(dres)
-    with open('/tmp/gridfile.txt', 'w') as f:
+    GRIDFILE = os.path.join(TMPDIR, 'gridfile.txt')
+    with open(GRIDFILE, 'w') as f:
         f.write('gridtype=lonlat\n')
         f.write('xsize=' + str(int(xsize)) + '\n')
         f.write('ysize=' + str(int(ysize)) + '\n')
@@ -73,7 +77,7 @@ def main(inputfile, outputfile, config):
         # Use bilinear interpolation for all continuous variables
         subprocess.run([
             'cdo',
-            'remapbil,/tmp/gridfile.txt',
+            'remapbil,' + GRIDFILE,
             filepath,
             tmp_file.name
         ])
