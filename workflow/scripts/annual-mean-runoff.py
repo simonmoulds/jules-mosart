@@ -4,6 +4,7 @@
 import os
 import numpy as np
 import xarray as xr
+import yaml
 import click
 
 @click.command()
