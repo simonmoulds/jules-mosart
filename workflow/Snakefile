@@ -111,7 +111,6 @@ rule compute_jules_annual_mean_runoff:
     resources:
         time="01:00:00",
         mem_mb=8000,
-        mem_per_cpu=2000,
         disk_mb=8000,
         partition="short"
     conda:
