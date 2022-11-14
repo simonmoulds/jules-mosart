@@ -15,7 +15,8 @@ rule all:
         'results/regrid_filenames.txt',
         'results/aggregate_month_filenames.txt',
         'results/aggregate_year_filenames.txt',
-        'results/resample_filenames.txt'
+        'results/resample_filenames.txt',
+        'results/jules_annual_mean_runoff_filenames.txt'
 
 rule regrid_jules_output:
     input:
@@ -98,6 +99,31 @@ rule resample_jules_output:
         python {input.script} -i {input.regrid_filenames} -o {output} --config {input.config}
         """
 
+rule compute_jules_annual_mean_runoff:
+    input:
+        resample_filenames='results/resample_filenames.txt',
+        script='workflow/scripts/annual-mean-runoff.py',
+        config=CONFIG
+    output:
+        'results/jules_annual_mean_runoff_filenames.txt'
+    params:
+        period='year'
+    resources:
+        time="00:30:00",
+        mem_mb=4000,
+        partition="short"
+    conda:
+        'jules_mosart'
+    shell:
+        """
+        export PYTHONPATH=
+        python {input.script} -i {input.resample_filenames} -o {output} --period {params.period} --config {input.config}
+        """
+
+# bash bin/04_compute_jules_annual_mean_runoff.sh "$1"
+# bash bin/05_combine_jules_runoff.sh "$1"
+# bash bin/06_upscale_flow_direction.sh "$1"
+# bash bin/07_create-mosartwm-input.sh "$1"
 
 # rule all:
 #     input:
