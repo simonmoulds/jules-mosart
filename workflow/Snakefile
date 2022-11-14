@@ -117,7 +117,7 @@ rule compute_jules_annual_mean_runoff:
     shell:
         """
         export PYTHONPATH=
-        python {input.script} -i {input.resample_filenames} -o {output} --period {params.period} --config {input.config}
+        python {input.script} -i {input.resample_filenames} -o {output} --config {input.config}
         """
 
 # bash bin/04_compute_jules_annual_mean_runoff.sh "$1"
