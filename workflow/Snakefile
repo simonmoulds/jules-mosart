@@ -109,8 +109,8 @@ rule compute_jules_annual_mean_runoff:
     params:
         period='year'
     resources:
-        time="00:30:00",
-        mem_mb=4000,
+        time="01:00:00",
+        mem_mb=8000,
         partition="short"
     conda:
         'jules_mosart'
