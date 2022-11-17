@@ -12,10 +12,10 @@ STEMS = config['jules']['id_stem']
 
 rule all:
     input:
-        expand('results/regrid_filenames_{stem}.txt', stem = STEMS)
-        # 'results/aggregate_month_filenames.txt',
-        # 'results/aggregate_year_filenames.txt',
-        # 'results/resample_filenames.txt',
+        expand('results/regrid_filenames_{stem}.txt', stem=STEMS),
+        expand('results/aggregate_month_filenames_{stem}.txt', stem=STEMS),
+        expand('results/aggregate_year_filenames_{stem}.txt', stem=STEMS),
+        expand('results/resample_filenames_{stem}.txt', stem=STEMS)
         # 'results/jules_annual_mean_runoff_filenames.txt'
 
 rule regrid_jules_output:
@@ -40,11 +40,11 @@ rule regrid_jules_output:
 
 rule aggregate_jules_output_month:
     input:
-        regrid_filenames='results/regrid_filenames.txt',
+        regrid_filenames=expand('results/regrid_filenames_{stem}.txt', stem=STEMS),
         script='workflow/scripts/aggregate-jules-output.py',
         config=CONFIG
     output:
-        'results/aggregate_month_filenames.txt'
+        'results/aggregate_month_filenames_{stem}.txt'
     params:
         period='month'
     resources:
@@ -61,11 +61,11 @@ rule aggregate_jules_output_month:
 
 rule aggregate_jules_output_year:
     input:
-        regrid_filenames='results/regrid_filenames.txt',
+        regrid_filenames=expand('results/regrid_filenames_{stem}.txt', stem=STEMS),
         script='workflow/scripts/aggregate-jules-output.py',
         config=CONFIG
     output:
-        'results/aggregate_year_filenames.txt'
+        'results/aggregate_year_filenames_{stem}.txt'
     params:
         period='year'
     resources:
@@ -82,11 +82,11 @@ rule aggregate_jules_output_year:
 
 rule resample_jules_output:
     input:
-        regrid_filenames='results/regrid_filenames.txt',
+        regrid_filenames=expand('results/regrid_filenames_{stem}.txt', stem=STEMS),
         script='workflow/scripts/resample-jules-output.py',
         config=CONFIG
     output:
-        'results/resample_filenames.txt'
+        'results/resample_filenames_{stem}.txt'
     resources:
         time = "00:30:00",
         mem_mb = 4000,
@@ -101,11 +101,11 @@ rule resample_jules_output:
 
 rule compute_jules_annual_mean_runoff:
     input:
-        resample_filenames='results/resample_filenames.txt',
+        resample_filenames=expand('results/resample_filenames_{stem}.txt', stem=STEMS),
         script='workflow/scripts/annual-mean-runoff.py',
         config=CONFIG
     output:
-        'results/jules_annual_mean_runoff_filenames.txt'
+        'results/annual_mean_runoff_filenames_{stem}.txt'
     params:
         period='year'
     resources:
