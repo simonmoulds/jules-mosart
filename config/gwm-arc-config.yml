@@ -4,9 +4,9 @@ jules:
   end_year: 2014
   suite: u-ci496
   id_stem:
-    JULES_vn6.1_irrig_current
-    JULES_vn6.1_irrig
-    JULES_vn6.1_noirrig
+    - JULES_vn6.1_irrig_current
+    - JULES_vn6.1_irrig
+    - JULES_vn6.1_noirrig
   job_name: jules_{year}
   profile_name: daily_hydrology
   jules_output_directory: /data/ouce-drift/cenv0857/JULES_output/u-ci496
