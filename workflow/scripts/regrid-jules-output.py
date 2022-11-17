@@ -14,15 +14,17 @@ from utils import convert_to_2d
 
 @click.command()
 @click.option('-o', '--outputfile', default='.', help='Name of output file')
+@click.option('--stem', help='ID of JULES ')
 @click.option('--config', default='config.yml', help='YAML configuration file')
-def main(outputfile, config):
+def main(outputfile, stem, config):
     with open(config, 'r') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
 
     start_year = int(config['jules']['start_year'])
     end_year = int(config['jules']['end_year'])
     years = np.arange(start_year, end_year+1)
-    id_stem = config['jules']['id_stem']
+    # id_stem = config['jules']['id_stem']
+    id_stem = stem
     job_name = config['jules']['job_name']
     profile_name = config['jules']['profile_name']
     jules_output_directory = config['jules']['jules_output_directory']

@@ -8,22 +8,22 @@ import os
 CONFIG = 'config/gwm-arc-config.yml'
 configfile: CONFIG
 
-# include: 'Snakefile_0'
+STEMS = config['jules']['id_stem']
 
 rule all:
     input:
-        'results/regrid_filenames.txt',
-        'results/aggregate_month_filenames.txt',
-        'results/aggregate_year_filenames.txt',
-        'results/resample_filenames.txt',
-        'results/jules_annual_mean_runoff_filenames.txt'
+        expand('results/regrid_filenames_{stem}.txt', stem = STEMS)
+        # 'results/aggregate_month_filenames.txt',
+        # 'results/aggregate_year_filenames.txt',
+        # 'results/resample_filenames.txt',
+        # 'results/jules_annual_mean_runoff_filenames.txt'
 
 rule regrid_jules_output:
     input:
         script='workflow/scripts/regrid-jules-output.py',
         config=CONFIG
     output:
-        'results/regrid_filenames.txt'
+        'results/regrid_filenames_{stem}.txt'
     params:
         None
     resources:
@@ -35,7 +35,7 @@ rule regrid_jules_output:
     shell:
         """
         export PYTHONPATH=
-        python {input.script} -o {output} --config {input.config}
+        python {input.script} -o {output} --stem {wildcards.stem} --config {input.config}
         """
 
 rule aggregate_jules_output_month:
@@ -44,7 +44,7 @@ rule aggregate_jules_output_month:
         script='workflow/scripts/aggregate-jules-output.py',
         config=CONFIG
     output:
-        'results/aggregate_year_filenames.txt'
+        'results/aggregate_month_filenames.txt'
     params:
         period='month'
     resources:
@@ -65,7 +65,7 @@ rule aggregate_jules_output_year:
         script='workflow/scripts/aggregate-jules-output.py',
         config=CONFIG
     output:
-        'results/aggregate_month_filenames.txt'
+        'results/aggregate_year_filenames.txt'
     params:
         period='year'
     resources:
