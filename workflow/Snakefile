@@ -40,7 +40,7 @@ rule regrid_jules_output:
 
 rule aggregate_jules_output_month:
     input:
-        regrid_filenames=expand('results/regrid_filenames_{stem}.txt', stem=STEMS),
+        regrid_filenames='results/regrid_filenames_{stem}.txt',
         script='workflow/scripts/aggregate-jules-output.py',
         config=CONFIG
     output:
@@ -61,7 +61,7 @@ rule aggregate_jules_output_month:
 
 rule aggregate_jules_output_year:
     input:
-        regrid_filenames=expand('results/regrid_filenames_{stem}.txt', stem=STEMS),
+        regrid_filenames='results/regrid_filenames_{stem}.txt',
         script='workflow/scripts/aggregate-jules-output.py',
         config=CONFIG
     output:
@@ -82,7 +82,7 @@ rule aggregate_jules_output_year:
 
 rule resample_jules_output:
     input:
-        regrid_filenames=expand('results/regrid_filenames_{stem}.txt', stem=STEMS),
+        regrid_filenames='results/regrid_filenames_{stem}.txt',
         script='workflow/scripts/resample-jules-output.py',
         config=CONFIG
     output:
@@ -101,7 +101,7 @@ rule resample_jules_output:
 
 rule compute_jules_annual_mean_runoff:
     input:
-        resample_filenames=expand('results/resample_filenames_{stem}.txt', stem=STEMS),
+        resample_filenames='results/resample_filenames_{stem}.txt',
         script='workflow/scripts/annual-mean-runoff.py',
         config=CONFIG
     output:
