@@ -72,16 +72,18 @@ def main(inputfile, outputfile, config):
         path = os.path.split(filepath)[0]
         filename = os.path.split(filepath)[1]
         basename = os.path.splitext(filename)[0]
-        tmp_file = tempfile.NamedTemporaryFile(suffix='.nc')
+        # tmp_file = tempfile.NamedTemporaryFile(suffix='.nc')
         nc_outputfile = os.path.join(path, basename + '.regrid.nc')
         # Use bilinear interpolation for all continuous variables
-        tmp_file = tempfile.NamedTemporaryFile(suffix='.nc')
+        # tmp_file = tempfile.NamedTemporaryFile(suffix='.nc')
+        tmp_file = os.path.join(TMPDIR, basename + '.regrid_tmp.nc')
         subprocess.run([
             'cdo',
             'remapbil,' + GRIDFILE,
             filepath,
             # os.path.join(TMPDIR, 'tmp.nc')
-            tmp_file.name
+            # tmp_file.name
+            tmp_file
         ])
         # Ensure that variables have datatype 'double', not 'short',
         # which seems to cause problems in JULES (not exactly sure why...)
@@ -89,7 +91,8 @@ def main(inputfile, outputfile, config):
             'cdo',
             '-b', 'F64', 'copy',
             # os.path.join(TMPDIR, 'tmp.nc'),
-            tmp_file.name,
+            # tmp_file.name,
+            tmp_file,
             nc_outputfile
         ])
         output_filelist.write(("%s" + os.linesep) % nc_outputfile)
