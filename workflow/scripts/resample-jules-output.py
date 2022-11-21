@@ -98,7 +98,7 @@ def main(inputfile, outputfile, config):
         output_filelist.write(("%s" + os.linesep) % nc_outputfile)
         # Tidy up
         # os.remove(os.path.join(TMPDIR, 'tmp.nc'))
-        os.remove(tmp_file.name)
+        os.remove(tmp_file) #.name)
 
     output_filelist.close()
         
