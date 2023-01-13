@@ -1,0 +1,17 @@
+name: conda_environment_base
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - bottleneck
+  - cdo
+  - click
+  - dask
+  - iris
+  - netCDF4
+  - pandas
+  - python=3
+  - pip
+  - pyarrow
+  - tqdm
+  - xarray
